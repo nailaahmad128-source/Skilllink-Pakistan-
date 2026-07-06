@@ -7,7 +7,7 @@ export const metadata = { title: "Employer Dashboard" };
 
 export default async function EmployerDashboard() {
   const { user, profile, supabase } = await requireRole(["employer"]);
-  const { data: employer } = await supabase.from("employer_profiles").select("*").eq("id", user.id).single();
+  const { data: employer } = await supabase.from("employer_profiles").select("*").eq("id", user.id).maybeSingle();
 
   const [{ count: activeJobs }, { count: pendingJobs }, { count: totalApplications }] = await Promise.all([
     supabase.from("jobs").select("*", { count: "exact", head: true }).eq("employer_id", user.id).eq("status", "approved"),
